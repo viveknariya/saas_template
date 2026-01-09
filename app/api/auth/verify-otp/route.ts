@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/db";
 import { ApiResponse, User, Otp } from "@/lib/types";
+import { signToken } from "@/lib/auth";
+import { cookies } from "next/headers";
 
 const sql = getAdminClient();
 
@@ -45,8 +47,22 @@ export async function POST(req: Request) {
       UPDATE otps SET used = TRUE WHERE id = ${otpDB.id}
     `;
 
+    // Sign JWT token
+    // Note: We might need to fetch the user matching the email, or just use the email
+    // For now assuming we use email as a placeholder for db identification if user record doesn't exist yet
+    const token = signToken({ email: email }); // Replace with actual db logic if needed
+
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: "/",
+    });
+
     return NextResponse.json<ApiResponse>(
-      { success: true, message: "OTP verified successfully" },
+      { success: true, message: "OTP verified successfully", data: { token } },
       { status: 200 }
     );
   } catch (error: any) {

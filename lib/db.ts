@@ -15,7 +15,7 @@ export function getAdminClient() {
 
   const client = postgres(dbUrl, {
     ssl: "require",
-    max: 5, // limit pool size to reduce pressure
+    max: 15, // limit pool size to reduce pressure
     idle_timeout: 30, // Close idle connections after 30 seconds
   });
 

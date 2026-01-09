@@ -16,11 +16,13 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"email" | "otp">("email");
@@ -71,6 +73,7 @@ export function LoginForm({
         window.alert("Invalid OTP");
       } else {
         // OTP verified successfully, user is logged in
+        router.push("/dashboard");
         window.alert("Logged in successfully");
         // Redirect or update UI as needed
       }
@@ -125,7 +128,7 @@ export function LoginForm({
                   <div className="flex items-center">
                     <FieldLabel htmlFor="password">OTP</FieldLabel>
                     <a
-                      href="#"
+                      href="/login"
                       className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                     >
                       Edit Email?

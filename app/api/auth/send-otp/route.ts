@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
-
-const sql = getAdminClient();
+import { sendEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
+    const sql = getAdminClient();
     const { email } = await req.json();
 
     if (!email) {
@@ -25,8 +25,23 @@ export async function POST(req: Request) {
       VALUES (${email}, ${otpCode}, ${expiresAt})
     `;
 
-    // TODO: Send email with OTP code
-    console.log(`OTP for ${email}: ${otpCode}`);
+    // Send email with OTP code
+    await sendEmail({
+      to: email,
+      subject: "Your OTP Code",
+      html: `
+        <div style="font-family: sans-serif; padding: 20px; color: #333;">
+          <h2>Your OTP Code</h2>
+          <p>Use the following code to complete your login/signup:</p>
+          <div style="font-size: 24px; font-weight: bold; background: #f4f4f4; padding: 10px; border-radius: 5px; display: inline-block;">
+            ${otpCode}
+          </div>
+          <p>This code will expire in 5 minutes.</p>
+        </div>
+      `,
+    });
+
+    console.log(`OTP sent to ${email}`);
 
     return NextResponse.json<ApiResponse>({
       success: true,
