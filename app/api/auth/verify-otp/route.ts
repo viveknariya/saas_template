@@ -47,10 +47,15 @@ export async function POST(req: Request) {
       UPDATE otps SET used = TRUE WHERE id = ${otpDB.id}
     `;
 
+    // Ensure user exists in users table
+    await sql`
+      INSERT INTO users (email)
+      VALUES (${email})
+      ON CONFLICT (email) DO NOTHING
+    `;
+
     // Sign JWT token
-    // Note: We might need to fetch the user matching the email, or just use the email
-    // For now assuming we use email as a placeholder for db identification if user record doesn't exist yet
-    const token = signToken({ email: email }); // Replace with actual db logic if needed
+    const token = signToken({ email: email });
 
     const cookieStore = await cookies();
     cookieStore.set("token", token, {
@@ -61,7 +66,7 @@ export async function POST(req: Request) {
       path: "/",
     });
 
-    return NextResponse.json<ApiResponse>(
+    return NextResponse.json<ApiResponse<{ token: string }>>(
       { success: true, message: "OTP verified successfully", data: { token } },
       { status: 200 }
     );

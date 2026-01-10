@@ -27,18 +27,25 @@ export const withAuth = (handler: Handler) => async (request: NextRequest) => {
       throw new Error("No token found");
     }
 
-    const decoded = verifyToken(token);
+    const decoded = verifyToken(token) as any;
     
-    if (!decoded) {
-      throw new Error("Invalid token");
+    if (!decoded || !decoded.email) {
+      throw new Error("Invalid token or missing email");
     }
 
-    // We can set headers if we want to pass info down
-    // But keeping it simple for now as requested
+    // Pass the user info down via headers
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-user-email", decoded.email);
     
+    // Create a new request with updated headers
+    const authenticatedRequest = new NextRequest(request, {
+      headers: requestHeaders,
+    });
+
     // call the wrapped route handler
-    return handler(request);
-  } catch {
+    return handler(authenticatedRequest);
+  } catch (error) {
+    console.error("Auth error:", error);
     const response = NextResponse.redirect(new URL("/login", request.url));
     response.cookies.delete("token");
     return response;

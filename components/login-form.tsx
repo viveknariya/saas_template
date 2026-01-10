@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { ApiResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -41,12 +42,14 @@ export function LoginForm({
         }
       );
 
-      if (!response.ok) {
+      const data: ApiResponse = await response.json();
+
+      if (!response.ok || !data.success) {
         // Handle error
-        window.alert("Failed to send OTP");
+        window.alert(data.message || "Failed to send OTP");
       } else {
         // OTP sent successfully, move to OTP step
-        window.alert("OTP sent successfully");
+        window.alert(data.message || "OTP sent successfully");
         setStep("otp");
       }
     } catch (error) {
@@ -68,13 +71,15 @@ export function LoginForm({
         }
       );
 
-      if (!response.ok) {
+      const data: ApiResponse<{ token: string }> = await response.json();
+
+      if (!response.ok || !data.success) {
         // Handle error
-        window.alert("Invalid OTP");
+        window.alert(data.message || "Invalid OTP");
       } else {
         // OTP verified successfully, user is logged in
         router.push("/dashboard");
-        window.alert("Logged in successfully");
+        window.alert(data.message || "Logged in successfully");
         // Redirect or update UI as needed
       }
     } catch (error) {
