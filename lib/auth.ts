@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sign, verify, JwtPayload } from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 export type Handler = (
   request: NextRequest
@@ -28,7 +28,7 @@ export const withAuth = (handler: Handler) => async (request: NextRequest) => {
     }
 
     const decoded = verifyToken(token) as any;
-    
+
     if (!decoded || !decoded.email) {
       throw new Error("Invalid token or missing email");
     }
@@ -36,7 +36,7 @@ export const withAuth = (handler: Handler) => async (request: NextRequest) => {
     // Pass the user info down via headers
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-user-email", decoded.email);
-    
+
     // Create a new request with updated headers
     const authenticatedRequest = new NextRequest(request, {
       headers: requestHeaders,

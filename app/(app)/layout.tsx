@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import { ReactNode } from "react";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import {
@@ -15,7 +15,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <AppSidebar className="border-none" />
         <main className="flex w-full">
           <SidebarTrigger className="h-screen flex justify-center items-center border rounded-none" />
-          {children}
+          <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <div className="w-full">
+              {children}
+            </div>
+          </div>
         </main>
       </SidebarProvider>
     </>
