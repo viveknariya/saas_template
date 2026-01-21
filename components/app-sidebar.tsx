@@ -1,9 +1,9 @@
-"use client"
-import * as React from "react"
-import { usePathname } from "next/navigation"
+"use client";
+import * as React from "react";
+import { usePathname } from "next/navigation";
 
-import { SearchForm } from "@/components/search-form"
-import { VersionSwitcher } from "@/components/version-switcher"
+import { SearchForm } from "@/components/search-form";
+import { VersionSwitcher } from "@/components/version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -15,8 +15,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import Link from "next/link"
+} from "@/components/ui/sidebar";
+import Link from "next/link";
 
 // This is sample data.
 const data = {
@@ -41,22 +41,16 @@ const data = {
           title: "Billing",
           url: "/user-billing",
         },
-        {
-          title: "Pricing",
-          url: "/user-pricing",
-        }
       ],
-    }
+    },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
-        Logo
-      </SidebarHeader>
+      <SidebarHeader>Logo</SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (
@@ -78,5 +72,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
