@@ -10,6 +10,7 @@ export interface User {
   email: string;
   first_name?: string;
   last_name?: string;
+  stripe_customer_id?: string;
   created_at: Date;
   updated_at: Date;
 }
