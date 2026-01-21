@@ -38,6 +38,10 @@ const data = {
           url: "/user-info",
         },
         {
+          title: "Billing",
+          url: "/user-billing",
+        },
+        {
           title: "Pricing",
           url: "/user-pricing",
         }
