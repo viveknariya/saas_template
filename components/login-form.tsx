@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { ApiResponse } from "@/lib/types";
+import { ApiResponse, User } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,152 +9,196 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"email" | "otp">("email");
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [countdown]);
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch("/api/user-info");
+      const data: ApiResponse<User> = await response.json();
+
+      if (!response.ok || !data.success || !data.data) {
+        throw new Error(data.message || "Failed to fetch user info");
+      }
+
+      setUser(data.data);
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      setUser(null);
+    }
+  };
 
   const sendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "/api/auth/send-otp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const response = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
 
       const data: ApiResponse = await response.json();
 
       if (!response.ok || !data.success) {
-        // Handle error
-        window.alert(data.message || "Failed to send OTP");
+        toast.error(data.message || "Failed to send OTP");
       } else {
-        // OTP sent successfully, move to OTP step
-        window.alert(data.message || "OTP sent successfully");
+        toast.success(data.message || "OTP sent successfully");
         setStep("otp");
+        setCountdown(30);
       }
     } catch (error) {
       console.error("Error sending OTP:", error);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
   const verifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "/api/auth/verify-otp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, otp }),
-        }
-      );
+      const response = await fetch("/api/auth/verify-otp", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, otp }),
+      });
 
       const data: ApiResponse<{ token: string }> = await response.json();
 
       if (!response.ok || !data.success) {
-        // Handle error
-        window.alert(data.message || "Invalid OTP");
+        toast.error(data.message || "Invalid OTP");
       } else {
-        // OTP verified successfully, user is logged in
         router.push("/dashboard");
-        window.alert(data.message || "Logged in successfully");
-        // Redirect or update UI as needed
+        toast.success(data.message || "Logged in successfully");
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      {step == "email" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Sign up or Log in</CardTitle>
-            <CardDescription>
-              Enter your email below to sign up or login to your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={(e) => sendOTP(e)}>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Field>
-                <Field>
-                  <Button type="submit">Send OTP</Button>
-                </Field>
-              </FieldGroup>
-            </form>
-          </CardContent>
-        </Card>
-      )}
-      {step == "otp" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Sign up or Log in</CardTitle>
-            <CardDescription>
-              OTP sent to <span className="text-lg font-bold">{email}</span>
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={(e) => verifyOTP(e)}>
-              <FieldGroup>
-                <Field>
-                  <div className="flex items-center">
-                    <FieldLabel htmlFor="password">OTP</FieldLabel>
-                    <a
-                      href="/login"
-                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                    >
-                      Edit Email?
-                    </a>
-                  </div>
-                  <Input
-                      id="password"
+    <>
+      <div className={cn("flex flex-col gap-6", className)} {...props}>
+        {user && (
+          <Button onClick={() => router.push("/dashboard")}>
+            Go to Dashboard
+          </Button>
+        )}
+        {step === "email" && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Sign up or Log in</CardTitle>
+              <CardDescription>
+                Enter your email below to sign up or login to your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={sendOTP}>
+                <FieldGroup>
+                  <Field>
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </Field>
+                  <Field>
+                    <Button type="submit">Send OTP</Button>
+                  </Field>
+                </FieldGroup>
+              </form>
+            </CardContent>
+          </Card>
+        )}
+        {step === "otp" && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Sign up or Log in</CardTitle>
+              <CardDescription>
+                OTP sent to <span className="text-lg font-bold">{email}</span>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={verifyOTP}>
+                <FieldGroup>
+                  <Field>
+                    <div className="flex items-center justify-between">
+                      <FieldLabel htmlFor="otp">OTP</FieldLabel>
+                      <a
+                        href="/login"
+                        className="text-sm underline-offset-4 hover:underline"
+                      >
+                        Edit Email?
+                      </a>
+                    </div>
+                    <Input
+                      id="otp"
                       type="text"
                       required
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
-                  />
-                </Field>
-                <Field>
-                  <Button type="submit">Submit</Button>
-                </Field>
-              </FieldGroup>
-            </form>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+                    />
+                  </Field>
+                  <Field>
+                    <Button type="submit">Submit</Button>
+                  </Field>
+                  <div className="text-center text-sm">
+                    Didn't receive the code?{" "}
+                    <button
+                      type="button"
+                      onClick={(e) => sendOTP(e)}
+                      disabled={countdown > 0}
+                      className={cn(
+                        "font-medium underline underline-offset-4 hover:text-primary",
+                        countdown > 0 && "cursor-not-allowed opacity-50",
+                      )}
+                    >
+                      {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+                    </button>
+                  </div>
+                </FieldGroup>
+              </form>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </>
   );
 }
