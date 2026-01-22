@@ -41,6 +41,10 @@ const data = {
           title: "Billing",
           url: "/user-billing",
         },
+        {
+          title: "Logout",
+          url: "/logout",
+        },
       ],
     },
   ],

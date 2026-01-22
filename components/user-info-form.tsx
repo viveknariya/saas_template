@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { cn } from "@/lib/utils";
 import { ApiResponse, User } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,9 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import { userAtom } from "@/lib/store";
 
 export function UserInfoForm({
   className,
@@ -24,21 +27,19 @@ export function UserInfoForm({
 }: React.ComponentProps<"div">) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [, setUser] = useAtom(userAtom);
+  const router = useRouter();
 
   const saveUserInfo = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-
-      const response = await fetch(
-        "/api/user-info",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ firstName, lastName }),
-        }
-      );
+      const response = await fetch("/api/user-info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ firstName, lastName }),
+      });
 
       const data: ApiResponse<User> = await response.json();
 
@@ -57,65 +58,62 @@ export function UserInfoForm({
     try {
       const response = await fetch("/api/user-info");
       const data: ApiResponse<User> = await response.json();
-      
+
       if (!response.ok || !data.success || !data.data) {
-        throw new Error(data.message || "Failed to fetch user info");
+        console.log(data.message);
       }
-      
-      setFirstName(data.data.first_name || "");
-      setLastName(data.data.last_name || "");
+      if (data.data) {
+        setFirstName(data.data.first_name || "");
+        setLastName(data.data.last_name || "");
+      }
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
   };
 
-
   useEffect(() => {
     getUserInfo();
-  }, []); 
-
+  }, []);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-          <CardHeader>
-            <CardTitle>User Information</CardTitle>
-            <CardDescription>
-              Enter your user information below
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={(e) => saveUserInfo(e)}>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="firstName">First Name</FieldLabel>
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder="First Name"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder="Last Name"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </Field>
-                <Field>
-                  <Button type="submit">Submit</Button>
-                </Field>
-              </FieldGroup>
-            </form>
-          </CardContent>
-        </Card>
+        <CardHeader>
+          <CardTitle>User Information</CardTitle>
+          <CardDescription>Enter your user information below</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={(e) => saveUserInfo(e)}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="firstName">First Name</FieldLabel>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="First Name"
+                  required
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
+                <Input
+                  id="lastName"
+                  type="text"
+                  placeholder="Last Name"
+                  required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Field>
+              <Field>
+                <Button type="submit">Submit</Button>
+              </Field>
+            </FieldGroup>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
