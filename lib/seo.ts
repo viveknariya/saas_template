@@ -46,21 +46,21 @@ type pageData = {
 
 export const seoConfig: Record<string, pageData> = {};
 
-(seoConfig["/"] = {
+((seoConfig["/"] = {
   pageTitle: "The free SaaS template with simple architecture",
   pageDescription:
     "An open-source, feature-rich, full-stack Next.js + PostgreSQL starter kit that manages boilerplate for you. Powered by Vivek Nariya",
-  ogImageUrl: `${baseUrl}/og-image.png`,
+  ogImageUrl: `${baseUrl}/logo.png`,
   ogImageAlt: "The free SaaS template with simple architecture",
   pageUrl: `${baseUrl}/`,
   pageKeywords: [
-   "free SaaS template",
-   "simple architecture",
-   "open-source",
-   "feature-rich",
-   "full-stack Next.js + PostgreSQL starter kit",
-   "boilerplate management",
-   "Vivek Nariya",
+    "free SaaS template",
+    "simple architecture",
+    "open-source",
+    "feature-rich",
+    "full-stack Next.js + PostgreSQL starter kit",
+    "boilerplate management",
+    "Vivek Nariya",
   ],
   sitemap: {
     url: `${baseUrl}/`,
@@ -79,7 +79,7 @@ export const seoConfig: Record<string, pageData> = {};
   (seoConfig["/contact"] = {
     pageTitle: "Contact",
     pageDescription: "Contact",
-    ogImageUrl: `${baseUrl}/og-image.png`,
+    ogImageUrl: `${baseUrl}/logo.png`,
     ogImageAlt: "Contact",
     pageUrl: `${baseUrl}/contact`,
     pageKeywords: ["Contact"],
@@ -99,7 +99,7 @@ export const seoConfig: Record<string, pageData> = {};
   (seoConfig["/privacy-policy"] = {
     pageTitle: "Privacy Policy",
     pageDescription: "Privacy Policy",
-    ogImageUrl: "logo.png",
+    ogImageUrl: `${baseUrl}/logo.png`,
     ogImageAlt: "Logo",
     pageUrl: `${baseUrl}/privacy-policy`,
     pageKeywords: ["Privacy Policy"],
@@ -119,7 +119,7 @@ export const seoConfig: Record<string, pageData> = {};
   (seoConfig["/terms-and-conditions"] = {
     pageTitle: "Terms and Conditions",
     pageDescription: "Terms and Conditions",
-    ogImageUrl: "logo.png",
+    ogImageUrl: `${baseUrl}/logo.png`,
     ogImageAlt: "Logo",
     pageUrl: `${baseUrl}/terms-and-conditions`,
     pageKeywords: ["Terms and Conditions"],
@@ -135,7 +135,54 @@ export const seoConfig: Record<string, pageData> = {};
       url: `${baseUrl}/terms-and-conditions`,
       description: "Terms and Conditions",
     },
-  })
+  }),
+  (seoConfig["/blogs"] = {
+    pageTitle: "Blogs",
+    pageDescription: "Blogs",
+    ogImageUrl: `${baseUrl}/logo.png`,
+    ogImageAlt: "Logo",
+    pageUrl: `${baseUrl}/blogs`,
+    pageKeywords: ["Blogs"],
+    sitemap: {
+      url: `${baseUrl}/blogs`,
+      lastModified: "2026-01-11T00:00:00+05:30",
+      changeFrequency: "yearly",
+      priority: 0.8,
+    },
+    jsonLd: {
+      "@type": "WebPage",
+      name: "Blogs",
+      url: `${baseUrl}/blogs`,
+      description: "Blogs",
+    },
+  }),
+  (seoConfig["/blogs/what-is-vector-database"] = {
+    pageTitle: "What is a Vector Database?",
+    pageDescription:
+      "Learn about vector databases and their applications in AI and machine learning.",
+    ogImageUrl: `${baseUrl}/logo.png`,
+    ogImageAlt: "Logo",
+    pageUrl: `${baseUrl}/blogs/what-is-vector-database`,
+    pageKeywords: [
+      "What is a Vector Database?",
+      "Vector Database",
+      "AI",
+      "Machine Learning",
+    ],
+    sitemap: {
+      url: `${baseUrl}/blogs/what-is-vector-database`,
+      lastModified: "2026-01-11T00:00:00+05:30",
+      changeFrequency: "yearly",
+      priority: 0.8,
+    },
+    jsonLd: {
+      "@type": "WebPage",
+      name: "What is a Vector Database?",
+      url: `${baseUrl}/blogs/what-is-vector-database`,
+      description:
+        "Learn about vector databases and their applications in AI and machine learning.",
+    },
+  }));
 
 export function getMetadataSitemap(slug: string): MetadataSitemapJsonLd {
   const seoData = seoConfig[slug];

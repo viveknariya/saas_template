@@ -14,7 +14,8 @@ export default function PageFooter() {
               <span className="text-xl font-bold">Zallyy</span>
             </div>
             <p className="text-muted-foreground text-sm">
-              An open-source, feature-rich, full-stack Next.js + PostgreSQL starter kit that manages boilerplate for you. Powered by Zallyy
+              An open-source, feature-rich, full-stack Next.js + PostgreSQL
+              starter kit that manages boilerplate for you. Powered by Zallyy
             </p>
           </div>
 
@@ -27,6 +28,22 @@ export default function PageFooter() {
                   className="hover:text-foreground transition-colors"
                 >
                   Features
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#pricing"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blogs"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Blogs
                 </Link>
               </li>
               <li>

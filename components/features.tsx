@@ -83,6 +83,17 @@ export default function PageFeatures() {
               </CardDescription>
             </CardHeader>
           </Card>
+          <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardHeader>
+              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <MessageCircle className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle>Blogs & SEO</CardTitle>
+              <CardDescription>
+                Built-in blogging platform with SEO optimization features.
+              </CardDescription>
+            </CardHeader>
+          </Card>
         </div>
       </div>
     </section>

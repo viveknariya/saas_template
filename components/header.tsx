@@ -7,6 +7,7 @@ export default function PageHeader() {
   const navItems = [
     { name: "Features", href: "/#features" },
     { name: "Pricing", href: "/#pricing" },
+    { name: "Blogs", href: "/blogs" },
   ];
 
   return (
