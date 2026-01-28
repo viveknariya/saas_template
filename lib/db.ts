@@ -5,12 +5,10 @@ const clientMap = new Map<string, postgres.Sql>();
 export function getAdminClient() {
   if (clientMap.has("saas")) return clientMap.get("saas")!;
 
-  const dbUrl = process.env.DATABASE_URL_SAAS;
+  const dbUrl = process.env.DATABASE_URL;
 
   if (!dbUrl) {
-    throw new Error(
-      "DATABASE_URL_SAAS is not defined in environment variables"
-    );
+    throw new Error("DATABASE_URL is not defined in environment variables");
   }
 
   const client = postgres(dbUrl, {
