@@ -20,7 +20,7 @@ A modern SaaS application template.
 3. Set up environment variables
 
    ```bash
-   cp .env.example .env
+   cp .env
    ```
 
 4. Start development server
