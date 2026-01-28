@@ -50,4 +50,4 @@ STRIPE_SECRET_KEY=
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+MIT License - see LICENSE file for details.
