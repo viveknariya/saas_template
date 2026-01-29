@@ -157,7 +157,7 @@ export const seoConfig: Record<string, pageData> = {};
     },
   }),
   (seoConfig["/blogs/do-i-really-need-orm"] = {
-    pageTitle: "Do I Really Need an ORM in 2024? Prisma vs Drizzle vs Raw SQL",
+    pageTitle: "Do I Really Need an ORM in 2026? Prisma vs Drizzle vs Raw SQL",
     pageDescription:
       "Explore the modern debate between ORMs like Prisma and Drizzle versus writing Raw SQL in Next.js applications. Which one is right for your SaaS?",
     ogImageUrl: `${baseUrl}/logo.png`,
@@ -176,13 +176,13 @@ export const seoConfig: Record<string, pageData> = {};
     ],
     sitemap: {
       url: `${baseUrl}/blogs/do-i-really-need-orm`,
-      lastModified: "2024-03-20T00:00:00+05:30",
+      lastModified: "2026-01-29T00:00:00+05:30",
       changeFrequency: "monthly",
       priority: 0.8,
     },
     jsonLd: {
       "@type": "WebPage",
-      name: "Do I Really Need an ORM in 2024? Prisma vs Drizzle vs Raw SQL",
+      name: "Do I Really Need an ORM in 2026? Prisma vs Drizzle vs Raw SQL",
       url: `${baseUrl}/blogs/do-i-really-need-orm`,
       description:
         "A deep dive into the ORM vs Raw SQL debate for modern web developers.",
