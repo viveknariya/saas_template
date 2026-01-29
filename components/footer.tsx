@@ -24,7 +24,7 @@ export default function PageFooter() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link
-                  href="#features"
+                  href="/#features"
                   className="hover:text-foreground transition-colors"
                 >
                   Features
