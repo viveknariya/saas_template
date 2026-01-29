@@ -32,7 +32,20 @@ const data = {
       items: [
         {
           title: "Introduction",
-          url: "/docs/introduction",
+          url: "/docs",
+        },
+      ],
+    },
+    {
+      title: "Setup",
+      items: [
+        {
+          title: "Tech Stack",
+          url: "/docs/tech-stack",
+        },
+        {
+          title: "Setup",
+          url: "/docs/setup",
         },
       ],
     },
