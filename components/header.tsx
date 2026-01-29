@@ -6,7 +6,6 @@ import { FolderGit2 } from "lucide-react";
 export default function PageHeader() {
   const navItems = [
     { name: "Features", href: "/#features" },
-    { name: "Pricing", href: "/#pricing" },
     { name: "Blogs", href: "/blogs" },
     { name: "Docs", href: "/docs" },
   ];
@@ -47,7 +46,7 @@ export default function PageHeader() {
             </Link>
             <Link href="/login">
               <Button variant="ghost" className="hidden md:inline-flex">
-                Demo App Sign In
+                Try Demo App
               </Button>
             </Link>
           </div>

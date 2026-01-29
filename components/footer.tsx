@@ -32,14 +32,6 @@ export default function PageFooter() {
               </li>
               <li>
                 <Link
-                  href="#pricing"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/blogs"
                   className="hover:text-foreground transition-colors"
                 >
