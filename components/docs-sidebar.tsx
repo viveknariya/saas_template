@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { usePathname } from "next/navigation";
-
 import {
   Sidebar,
   SidebarContent,
@@ -20,35 +19,29 @@ import Link from "next/link";
 const data = {
   navMain: [
     {
-      title: "Navigation",
+      title: "Home",
       items: [
         {
-          title: "Dashboard",
-          url: "/dashboard",
+          title: "Home",
+          url: "/",
         },
       ],
     },
     {
-      title: "User",
+      title: "Introduction",
       items: [
         {
-          title: "Info",
-          url: "/user-info",
-        },
-        {
-          title: "Billing",
-          url: "/user-billing",
-        },
-        {
-          title: "Logout",
-          url: "/logout",
+          title: "Introduction",
+          url: "/docs/introduction",
         },
       ],
     },
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function DocsSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   return (
     <Sidebar {...props}>

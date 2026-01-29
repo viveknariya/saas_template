@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import {
   Blocks,
+  BugIcon,
   CheckCircle,
   DollarSign,
   Mail,
@@ -91,6 +92,17 @@ export default function PageFeatures() {
               <CardTitle>Blogs & SEO</CardTitle>
               <CardDescription>
                 Built-in blogging platform with SEO optimization features.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardHeader>
+              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <BugIcon className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle>Docs</CardTitle>
+              <CardDescription>
+                Comprehensive documentation system for your product.
               </CardDescription>
             </CardHeader>
           </Card>

@@ -8,6 +8,7 @@ export default function PageHeader() {
     { name: "Features", href: "/#features" },
     { name: "Pricing", href: "/#pricing" },
     { name: "Blogs", href: "/blogs" },
+    { name: "Docs", href: "/docs" },
   ];
 
   return (

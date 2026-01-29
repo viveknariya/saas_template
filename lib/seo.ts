@@ -182,6 +182,26 @@ export const seoConfig: Record<string, pageData> = {};
       description:
         "Learn about vector databases and their applications in AI and machine learning.",
     },
+  }),
+  (seoConfig["/docs"] = {
+    pageTitle: "Docs",
+    pageDescription: "Docs",
+    ogImageUrl: `${baseUrl}/logo.png`,
+    ogImageAlt: "Logo",
+    pageUrl: `${baseUrl}/docs`,
+    pageKeywords: ["Docs"],
+    sitemap: {
+      url: `${baseUrl}/docs`,
+      lastModified: "2026-01-11T00:00:00+05:30",
+      changeFrequency: "yearly",
+      priority: 0.8,
+    },
+    jsonLd: {
+      "@type": "WebPage",
+      name: "Docs",
+      url: `${baseUrl}/docs`,
+      description: "Docs",
+    },
   }));
 
 export function getMetadataSitemap(slug: string): MetadataSitemapJsonLd {

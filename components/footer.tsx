@@ -48,6 +48,14 @@ export default function PageFooter() {
               </li>
               <li>
                 <Link
+                  href="/docs"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Docs
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="https://github.com/viveknariya"
                   className="hover:text-foreground transition-colors"
                 >

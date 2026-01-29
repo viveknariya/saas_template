@@ -6,8 +6,9 @@ import { seoConfig, baseUrl } from "@/lib/seo";
 
 const avoidUrls = [
   "/",
-  "/contact",
   "/blogs",
+  "/docs",
+  "/contact",
   "/privacy-policy",
   "/terms-and-conditions",
 ];

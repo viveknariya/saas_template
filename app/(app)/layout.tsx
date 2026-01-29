@@ -12,7 +12,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <AppSidebar className="border-none" />
         <main className="flex w-full">
-          <SidebarTrigger className="h-screen flex justify-center items-center border rounded-none" />
+          <SidebarTrigger className="h-screen border rounded-none" />
           <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
             <div className="w-full">
               <AppInitProvider>{children}</AppInitProvider>
