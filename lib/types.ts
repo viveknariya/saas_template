@@ -23,3 +23,7 @@ export interface Otp {
   used: boolean;
   created_at: Date;
 }
+
+export interface AuthContext {
+  userId: string;
+}

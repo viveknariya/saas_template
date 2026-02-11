@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 import {
   Sidebar,
@@ -15,62 +15,63 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: "Navigation",
-      items: [
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-        },
-      ],
-    },
-    {
-      title: "User",
-      items: [
-        {
-          title: "Info",
-          url: "/user-info",
-        },
-        {
-          title: "Billing",
-          url: "/user-billing",
-        },
-        {
-          title: "Logout",
-          url: "/logout",
-        },
-      ],
-    },
-  ],
-};
+import { NavMain } from "./nav-main";
+import {
+  DollarSign,
+  Home,
+  Inbox,
+  LayoutDashboard,
+  LogOut,
+  Search,
+  Settings,
+  Sparkles,
+  User,
+} from "lucide-react";
+import { NavSecondary } from "./nav-secondary";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const pathname = usePathname();
+  const data = {
+    navMain: [
+      {
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: LayoutDashboard,
+      },
+    ],
+    navSecondary: [
+      {
+        title: "Info",
+        url: "/user-info",
+        icon: User,
+      },
+      {
+        title: "Billing",
+        url: "/user-billing",
+        icon: DollarSign,
+      },
+
+      {
+        title: "Logout",
+        url: "/logout",
+        icon: LogOut,
+      },
+    ],
+  };
   return (
     <Sidebar {...props}>
-      <SidebarHeader>Logo</SidebarHeader>
+      <SidebarHeader>
+        <Link href="/" className="flex items-center gap-2 font-bold px-2 py-2">
+          <div className="flex h-8 w-8 items-center justify-center border border-black">
+            <Image src="/logo.png" alt="Logo" width={32} height={32} />
+          </div>
+          <span className="text-xl">Zallyy</span>
+        </Link>
+      </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {item.items?.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={pathname === item.url}>
-                      <Link href={item.url}>{item.title}</Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+        <SidebarGroup>
+          <NavMain items={data.navMain} />
+        </SidebarGroup>
+        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

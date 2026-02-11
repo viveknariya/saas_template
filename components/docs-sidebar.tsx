@@ -14,6 +14,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
 
 // This is sample data.
 const data = {
@@ -58,7 +59,14 @@ export function DocsSidebar({
   const pathname = usePathname();
   return (
     <Sidebar {...props}>
-      <SidebarHeader>Logo</SidebarHeader>
+      <SidebarHeader className="p-4">
+        <div className="flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded bg-primary text-primary-foreground">
+            <ShieldCheck className="h-4 w-4" />
+          </div>
+          <span className="font-bold tracking-tight">SocialVault</span>
+        </div>
+      </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (

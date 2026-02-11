@@ -1,5 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import Image from "next/image";
 import { ApiResponse, User } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +15,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "react-hot-toast";
 
 export function LoginForm({
   className,
@@ -27,32 +29,30 @@ export function LoginForm({
   const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (countdown > 0) {
-      timer = setInterval(() => {
-        setCountdown((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => clearInterval(timer);
-  }, [countdown]);
-
-  useEffect(() => {
-    getUserInfo();
+    let isMounted = true;
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch("/api/user-info");
+        const data: ApiResponse<User> = await response.json();
+        if (isMounted && data.data) {
+          setUser(data.data);
+        }
+      } catch {
+        if (isMounted) setUser(null);
+      }
+    };
+    fetchUserInfo();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  const getUserInfo = async () => {
-    try {
-      const response = await fetch("/api/user-info");
-      const data: ApiResponse<User> = await response.json();
-
-      if (data.data) {
-        setUser(data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-      setUser(null);
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [countdown]);
 
   const sendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +76,6 @@ export function LoginForm({
         setCountdown(30);
       }
     } catch (error) {
-      console.error("Error sending OTP:", error);
       toast.error("An unexpected error occurred. Please try again.");
     }
   };
@@ -102,7 +101,6 @@ export function LoginForm({
         toast.success(data.message || "Logged in successfully");
       }
     } catch (error) {
-      console.error("Error verifying OTP:", error);
       toast.error("An unexpected error occurred. Please try again.");
     }
   };
@@ -110,6 +108,17 @@ export function LoginForm({
   return (
     <>
       <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <div className="flex flex-col items-center gap-2 text-center">
+          <Link href="/" className="flex items-center gap-2 font-bold">
+            <div className="flex h-8 w-8 items-center justify-center border border-black">
+              <Image src="/logo.png" alt="Logo" width={32} height={32} />
+            </div>
+            <span className="text-xl">Zallyy</span>
+          </Link>
+          <p className="text-sm text-muted-foreground">
+            Empowering builders to ship faster.
+          </p>
+        </div>
         {user && (
           <Button onClick={() => router.push("/dashboard")}>
             Go to Dashboard
@@ -178,7 +187,7 @@ export function LoginForm({
                     <Button type="submit">Submit</Button>
                   </Field>
                   <div className="text-center text-sm">
-                    Didn't receive the code?{" "}
+                    Didn&apos;t receive the code?{" "}
                     <button
                       type="button"
                       onClick={(e) => sendOTP(e)}

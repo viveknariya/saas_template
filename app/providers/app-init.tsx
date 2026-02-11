@@ -5,6 +5,7 @@ import { useState, useEffect, ReactNode } from "react";
 import { userAtom } from "@/lib/store";
 import { User, ApiResponse } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { LoadingScreen } from "@/components/ui/loading-screen";
 
 export default function AppInitProvider({ children }: { children: ReactNode }) {
   const [, setUser] = useAtom(userAtom);
@@ -24,8 +25,7 @@ export default function AppInitProvider({ children }: { children: ReactNode }) {
       if (data.data) {
         setUser(data.data);
       }
-    } catch (error) {
-      console.error("Error fetching user info:", error);
+    } catch {
       setUser(null);
     } finally {
       setIsInitialized(true);
@@ -34,10 +34,17 @@ export default function AppInitProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     getUserInfo();
-  }, [setUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!isInitialized) {
-    return "Verifying session...";
+    return (
+      <LoadingScreen
+        title="Verifying session"
+        subtitle="Checking your account status."
+        size="sm"
+      />
+    );
   }
 
   return <>{children}</>;

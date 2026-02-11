@@ -2,10 +2,14 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { sign, verify, JwtPayload } from "jsonwebtoken";
+import type { AuthContext } from "@/lib/types";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-export type Handler = (request: NextRequest) => Promise<NextResponse>;
+export type Handler = (
+  request: NextRequest,
+  auth: AuthContext,
+) => Promise<NextResponse>;
 
 export const signToken = (payload: string | object | Buffer) => {
   return sign(payload, JWT_SECRET, { expiresIn: "7d" });
@@ -33,28 +37,19 @@ export const withAuth = (handler: Handler) => async (request: NextRequest) => {
     );
   }
 
-  const decoded = verifyToken(token) as any;
+  const decoded = verifyToken(token);
 
-  if (!decoded || !decoded.email) {
+  if (!decoded || typeof decoded === "string" || !decoded.id) {
     return NextResponse.json(
       {
         success: false,
-        message: "Invalid token or missing email",
+        message: "Invalid token or missing user ID",
         error: "withoutauth",
       },
       { status: 200 },
     );
   }
 
-  // Pass the user info down via headers
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-user-email", decoded.email);
-
-  // Create a new request with updated headers
-  const authenticatedRequest = new NextRequest(request, {
-    headers: requestHeaders,
-  });
-
-  // call the wrapped route handler
-  return handler(authenticatedRequest);
+  // Call the wrapped route handler with auth context.
+  return handler(request, { userId: decoded.id });
 };

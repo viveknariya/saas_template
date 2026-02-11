@@ -12,6 +12,7 @@ import {
 import { ExternalLink, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { ApiResponse } from "@/lib/types";
+import { toast } from "react-hot-toast";
 
 export function UserBillingForm({
   className,
@@ -31,11 +32,12 @@ export function UserBillingForm({
       if (data.success && data.data?.url) {
         window.location.href = data.data.url;
       } else {
-        alert(data.message || "Failed to create billing portal session");
+        toast.error(data.message || "Failed to create billing portal session");
       }
-    } catch (error) {
-      console.error("Error creating billing portal session:", error);
-      alert("An error occurred while trying to access the billing portal.");
+    } catch {
+      toast.error(
+        "An error occurred while trying to access the billing portal.",
+      );
     } finally {
       setLoading(false);
     }
@@ -55,8 +57,8 @@ export function UserBillingForm({
           <div className="flex flex-col gap-4">
             <p className="text-sm text-muted-foreground">
               Click the button below to access your Stripe customer portal.
-              You'll be redirected to a secure page where you can update your
-              plan or payment details.
+              You&apos;ll be redirected to a secure page where you can update
+              your plan or payment details.
             </p>
             <Button
               onClick={handleManageBilling}

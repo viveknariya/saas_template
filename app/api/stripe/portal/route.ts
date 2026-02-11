@@ -4,27 +4,16 @@ import { getAdminClient } from "@/lib/db";
 import { withAuth } from "@/lib/auth";
 import { ApiResponse, User } from "@/lib/types";
 
-export const POST = withAuth(async (request: NextRequest) => {
+export const POST = withAuth(
+  async (request: NextRequest, { userId }) => {
   try {
     const sql = getAdminClient();
-    const email = request.headers.get("x-user-email");
-
-    if (!email) {
-      return NextResponse.json<ApiResponse>(
-        {
-          success: false,
-          message: "Unauthorized",
-          error: "User email not found in headers",
-        },
-        { status: 401 },
-      );
-    }
 
     // 1. Get user from database
     const [user] = await sql<User[]>`
       SELECT id, email, stripe_customer_id 
       FROM users 
-      WHERE email = ${email}
+      WHERE id = ${userId}
     `;
 
     if (!user) {
@@ -71,15 +60,15 @@ export const POST = withAuth(async (request: NextRequest) => {
       message: "Portal session created successfully",
       data: { url: session.url },
     });
-  } catch (error: any) {
-    console.error("POST /api/stripe/portal error:", error);
+  } catch (error) {
     return NextResponse.json<ApiResponse>(
       {
         success: false,
         message: "Failed to create portal session",
-        error: error.message,
+        error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     );
   }
-});
+  },
+);
